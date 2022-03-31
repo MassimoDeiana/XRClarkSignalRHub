@@ -1,6 +1,6 @@
 ﻿namespace XRClarkSignalR.Api.Hubs;
 
-public class User
+public class User 
 {
     public string Name { get; set; }
 
@@ -10,11 +10,15 @@ public class User
 
     public string ActiveScene { get; set; }
 
-    public string id { get; set; }
+    public List<string> Scenes { get; set; }
+
+    public List<string> Machines { get; set; }
+
+    public string Id { get; set; }
 
     protected bool Equals(User other)
     {
-        return id == other.id;
+        return Id == other.Id;
     }
 
     public override bool Equals(object? obj)
@@ -27,11 +31,11 @@ public class User
 
     public override int GetHashCode()
     {
-        return id.GetHashCode();
+        return Id.GetHashCode();
     }
 
     public override string ToString()
     {
-        return id + ":" + Name + ":" + ActiveScene;
+        return Id + ":" + Name + ":" + ActiveScene;
     }
 }

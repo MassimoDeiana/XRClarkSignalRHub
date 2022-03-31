@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using XRClarkSignalR.Api.Hubs;
-using XRClarkSignalR.Api.Hubs.Client;
 
 namespace XRClarkSignalR.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ServerController : Controller
+public class ServerController : ControllerBase
 {
     private readonly IHubContext<ControlHub> _controlHub;
 
@@ -17,9 +16,18 @@ public class ServerController : Controller
     }
 
     [HttpGet]
-    public ActionResult<List<User>> Index()
+    public ActionResult<List<User>> GetAllUsers()
     {
         //Console.WriteLine("requete");
         return ConnectedUser.users;
     }
+
+    /*[HttpGet]
+    [Route("/scenes")]
+    public ActionResult<List<string>> GetAllScenes()
+    {
+        return Scenes.scenes;
+    }*/
+
+
 }

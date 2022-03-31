@@ -1,4 +1,4 @@
-﻿namespace XRClarkSignalR.Api.Hubs.Client;
+﻿namespace XRClarkSignalR.Api.Hubs;
 
 public interface IClient
 {

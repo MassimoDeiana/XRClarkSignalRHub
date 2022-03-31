@@ -2,5 +2,5 @@
 
 public class WebClient
 {
-    public static string id { get; set; }
+    public static string? Id { get; set; }
 }
