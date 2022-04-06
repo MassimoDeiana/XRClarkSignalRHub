@@ -4,5 +4,7 @@ public class MessageFromClient
 {
     public string User { get; set; }
 
-    public string Message { get; set; }
+    public string Scene { get; set; }
+
+    public string Machine { get; set; }
 }

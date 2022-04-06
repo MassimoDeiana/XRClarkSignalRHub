@@ -8,7 +8,7 @@ public class User
 
     public string MACAdress { get; set; }
 
-    public string ActiveScene { get; set; }
+    public Scene ActiveScene { get; set; }
 
     public List<string> Scenes { get; set; }
 

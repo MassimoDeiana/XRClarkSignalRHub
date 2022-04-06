@@ -11,16 +11,26 @@ public class ControlHub : Hub<IClient>
         Console.WriteLine("Send Message");
         await Clients.Others.ReceiveMessage(message);
     }
-
-    public async Task StartSimulation(User user, string scene)
+    
+    public async Task StartSimulation(User user, string scene, string machine)
     {
         Console.WriteLine("start simulation " + scene );
         //Console.WriteLine(user.Name + ":" + user.Model + ":" + user.MACAdress + ":" + user.id);
-        await Clients.Client(user.Id).ReceiveMessage(new MessageFromClient
+        Console.WriteLine( "machine : " + machine);
+        try
         {
-            User = "Master",
-            Message = scene
-        });
+            await Clients.Client(user.Id).ReceiveMessage(new MessageFromClient
+            {
+                User = "Master",
+                Scene = scene,
+                Machine = machine
+            });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task StopSimulation(User user)
@@ -30,7 +40,7 @@ public class ControlHub : Hub<IClient>
         await Clients.Client(user.Id).ReceiveMessage(new MessageFromClient
         {
             User = "Master",
-            Message = "Menu"
+            Scene = "Menu"
         });
     }
 
@@ -56,11 +66,22 @@ public class ControlHub : Hub<IClient>
     
     public async Task RegisterUser(User user)
     {
-        Console.WriteLine("Register user");
-        user.Id = Context.ConnectionId;
-        ConnectedUser.users.Add(user);
-        await Clients.Caller.UserRegistered(user);
-        await SendListOfUser();
+        try
+        {
+            //user.ActiveScene = scene;
+            Console.WriteLine(user.Name);
+            Console.WriteLine("Register user");
+            user.Id = Context.ConnectionId;
+            ConnectedUser.users.Add(user);
+            await Clients.Caller.UserRegistered(user);
+            await SendListOfUser();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
     }
 
     /*public async Task RegisterAllScenes(List<string> scenes)
@@ -93,11 +114,19 @@ public class ControlHub : Hub<IClient>
 
     
     
-    public async Task SetActiveScene(string scene)
+    public async Task SetActiveScene(string sceneName)
     {
         //Console.WriteLine("ici");
-        ConnectedUser.users.Find(u=> u.Equals(new User{Id = Context.ConnectionId}))!.ActiveScene = scene ;
+        ConnectedUser.users.Find(u=> u.Equals(new User{Id = Context.ConnectionId}))!.ActiveScene.Name = sceneName ;
         //Console.WriteLine("la");
+        await SendListOfUser();
+    }
+
+    public async Task AddLog(ActionLog log)
+    {
+        Console.WriteLine("Message : " + log.Message);
+        Console.WriteLine("Severity : " + log.Severity);
+        ConnectedUser.users.Find(u=> u.Equals(new User{Id = Context.ConnectionId}))!.ActiveScene.Logs.Add(log) ;
         await SendListOfUser();
     }
 }
