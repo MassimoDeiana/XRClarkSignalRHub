@@ -12,8 +12,7 @@ public class User
 
     public List<string> Scenes { get; set; }
 
-    public List<string> Machines { get; set; }
-
+    public List<MachineryModel> Machines { get; set; }
     public string Id { get; set; }
 
     protected bool Equals(User other)

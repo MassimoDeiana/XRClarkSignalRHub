@@ -7,4 +7,6 @@ public class MessageFromClient
     public string Scene { get; set; }
 
     public string Machine { get; set; }
+
+    public float Mass { get; set; }
 }

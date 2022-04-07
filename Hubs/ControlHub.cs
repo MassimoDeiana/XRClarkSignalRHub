@@ -12,7 +12,7 @@ public class ControlHub : Hub<IClient>
         await Clients.Others.ReceiveMessage(message);
     }
     
-    public async Task StartSimulation(User user, string scene, string machine)
+    public async Task StartSimulation(User user, string scene, string machine, float mass)
     {
         Console.WriteLine("start simulation " + scene );
         //Console.WriteLine(user.Name + ":" + user.Model + ":" + user.MACAdress + ":" + user.id);
@@ -23,7 +23,8 @@ public class ControlHub : Hub<IClient>
             {
                 User = "Master",
                 Scene = scene,
-                Machine = machine
+                Machine = machine,
+                Mass = mass
             });
         }
         catch (Exception e)
