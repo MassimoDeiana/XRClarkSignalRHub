@@ -1,4 +1,5 @@
 using XRClarkSignalR.Api.Hubs;
+using XRClarkSignalR.Api.Hubs.Model;
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -22,6 +23,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddScoped<XrclarkContext>();
+builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

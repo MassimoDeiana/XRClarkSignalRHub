@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using XRClarkSignalR.Api.Hubs;
+using XRClarkSignalR.Api.Hubs.Model;
 
 namespace XRClarkSignalR.Api.Controllers;
 
@@ -15,12 +17,16 @@ public class ServerController : ControllerBase
         _controlHub = controlHub;
     }
 
-    [HttpGet]
+
+    [HttpGet("users")]
     public ActionResult<List<User>> GetAllUsers()
     {
         //Console.WriteLine("requete");
         return ConnectedUser.users;
     }
+    
+
+    
 
     /*[HttpGet]
     [Route("/scenes")]

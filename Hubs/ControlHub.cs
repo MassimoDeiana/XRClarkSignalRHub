@@ -12,11 +12,11 @@ public class ControlHub : Hub<IClient>
         await Clients.Others.ReceiveMessage(message);
     }
     
+    /**
+     * Start a simulation with the given parameters for the given user
+     */
     public async Task StartSimulation(User user, string scene, string machine, float mass)
     {
-        Console.WriteLine("start simulation " + scene );
-        //Console.WriteLine(user.Name + ":" + user.Model + ":" + user.MACAdress + ":" + user.id);
-        Console.WriteLine( "machine : " + machine);
         try
         {
             await Clients.Client(user.Id).ReceiveMessage(new MessageFromClient
@@ -34,10 +34,11 @@ public class ControlHub : Hub<IClient>
         }
     }
 
+    /**
+     * Stop the simulation for the given user
+     */
     public async Task StopSimulation(User user)
     {
-        Console.WriteLine("stop simulation");
-        //Console.WriteLine(user.Name + ":" + user.Model + ":" + user.MACAdress + ":" + user.id);
         await Clients.Client(user.Id).ReceiveMessage(new MessageFromClient
         {
             User = "Master",
@@ -45,33 +46,30 @@ public class ControlHub : Hub<IClient>
         });
     }
 
+    
     public void RegisterWebClient()
     {
         WebClient.Id = Context.ConnectionId;
-        Console.WriteLine("Web id :" + WebClient.Id);
     }
 
+    /**
+     * Send the list of users to the web client
+     */
     public async Task SendListOfUser()
     {
-    //    Console.WriteLine("users : " + ConnectedUser.ToString());
-    Console.WriteLine("client web : " + WebClient.Id);
-    if (WebClient.Id != null)
-    {
-        Console.WriteLine("web client id not null");
-        await Clients.Client(WebClient.Id).ReceiveListOfUser(ConnectedUser.users);
-        Console.WriteLine(ConnectedUser.ToString());
-        
-    }
-    //    Console.WriteLine("On send la liste");
+        if (WebClient.Id != null)
+        {
+            await Clients.Client(WebClient.Id).ReceiveListOfUser(ConnectedUser.users);
+        }
     }
     
+    /**
+     * Send the list of machines to the web client
+     */
     public async Task RegisterUser(User user)
     {
         try
         {
-            //user.ActiveScene = scene;
-            Console.WriteLine(user.Name);
-            Console.WriteLine("Register user");
             user.Id = Context.ConnectionId;
             ConnectedUser.users.Add(user);
             await Clients.Caller.UserRegistered(user);
@@ -84,18 +82,10 @@ public class ControlHub : Hub<IClient>
         }
 
     }
-
-    /*public async Task RegisterAllScenes(List<string> scenes)
-    {
-        Console.WriteLine("registering scenes");
-        Scenes.scenes = scenes;
-        Console.WriteLine(" scenes registered");
-
-    }*/
+    
     
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        Console.WriteLine("Deconnexion : " + Context.ConnectionId);
         ConnectedUser.users.Remove(new User
         {
             Id = Context.ConnectionId
@@ -103,7 +93,6 @@ public class ControlHub : Hub<IClient>
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
         if (Context.ConnectionId != WebClient.Id)
         {
-            //Console.WriteLine(Context.ConnectionId + " / " + WebClient.Id);
             await SendListOfUser();
         }
         else
@@ -117,16 +106,15 @@ public class ControlHub : Hub<IClient>
     
     public async Task SetActiveScene(string sceneName)
     {
-        //Console.WriteLine("ici");
         ConnectedUser.users.Find(u=> u.Equals(new User{Id = Context.ConnectionId}))!.ActiveScene.Name = sceneName ;
-        //Console.WriteLine("la");
         await SendListOfUser();
     }
 
+    /**
+     * Add log to the user
+     */
     public async Task AddLog(ActionLog log)
     {
-        Console.WriteLine("Message : " + log.Message);
-        Console.WriteLine("Severity : " + log.Severity);
         ConnectedUser.users.Find(u=> u.Equals(new User{Id = Context.ConnectionId}))!.ActiveScene.Logs.Add(log) ;
         await SendListOfUser();
     }
