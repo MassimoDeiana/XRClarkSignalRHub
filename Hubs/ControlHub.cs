@@ -66,6 +66,7 @@ public class ControlHub : Hub<IClient>
     /**
      * Send the list of machines to the web client
      */
+    
     public async Task RegisterUser(User user)
     {
         try

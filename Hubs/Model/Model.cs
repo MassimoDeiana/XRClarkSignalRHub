@@ -4,9 +4,10 @@ namespace XRClarkSignalR.Api.Hubs.Model;
 
 public class XrclarkContext : DbContext
 {
+    
     public DbSet<Machine> Machines { get; set; }
     public string DbPath { get; }
-
+    
     public XrclarkContext()
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
@@ -32,3 +33,4 @@ public class Machine
     public double MachineWheels { get; set; }
     public double MachineMaxWeight { get; set; }
 }
+

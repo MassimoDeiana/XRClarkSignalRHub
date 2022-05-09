@@ -18,7 +18,7 @@ public class User
     protected bool Equals(User other)
     {
         return Id == other.Id;
-    }
+    }   
 
     public override bool Equals(object? obj)
     {
